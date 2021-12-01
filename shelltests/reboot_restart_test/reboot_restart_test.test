@@ -1,4 +1,4 @@
-$ rebar3 tar
+$ epm tar
 > /===> Tarball successfully created:/
 >= 0
 

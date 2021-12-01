@@ -10,32 +10,32 @@ Set-Location $PSScriptRoot
 
 # Clean all builds (continue on error)
 "*** Clean"
-Get-ChildItem -Path . -Filter _build -Recurse | ForEach-Object { 
+Get-ChildItem -Path . -Filter _build -Recurse | ForEach-Object {
     "Remove $($_.FullName).."
     Remove-Item $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
 }
 ""
 
-# Create temporary build folder for rebar3
-"*** Build rebar3"
-$rebar3_dir = "$PSScriptRoot\$(([System.Guid]::NewGuid()).Guid)"
-mkdir $rebar3_dir | Out-Null
+# Create temporary build folder for epm
+"*** Build epm"
+$epm_dir = "$PSScriptRoot\$(([System.Guid]::NewGuid()).Guid)"
+mkdir $epm_dir | Out-Null
 
-# Clone latest rebar3 and build with relx as a checkout
-Push-Location $rebar3_dir
-& git clone "https://github.com/erlang/rebar3" .
+# Clone latest epm and build with relx as a checkout
+Push-Location $epm_dir
+& git clone "https://github.com/erlpm/epm" .
 mkdir _checkouts | Out-Null
 New-Item -ItemType SymbolicLink -Path "_checkouts\relx" -Target "$PSScriptRoot\..\..\relx" | Out-Null
-(Get-Content rebar.config) -replace 'relx(.*)build/default/lib/', 'relx$1checkouts' | Set-Content rebar.config -Encoding ASCII
+(Get-Content epm.config) -replace 'relx(.*)build/default/lib/', 'relx$1checkouts' | Set-Content epm.config -Encoding ASCII
 cmd /c bootstrap.bat
 Pop-Location
 ""
 
-# Function to run rebar3
-function Rebar() {
-    & escript.exe "$rebar3_dir\rebar3" @args
+# Function to run epm
+function Epm() {
+    & escript.exe "$epm_dir\epm" @args
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "rebar3 ${args} exited with status $LASTEXITCODE"
+        Write-Error "epm ${args} exited with status $LASTEXITCODE"
     }
 }
 
@@ -43,12 +43,12 @@ function Rebar() {
 Set-Location ".\$release\"
 
 "*** Build release"
-Rebar release
+Epm release
 ""
 
 "*** Rebuild dev release (test for symlink issues)"
-Rebar as dev release
-Rebar as dev release
+Epm as dev release
+Epm as dev release
 ""
 
 # Go to release

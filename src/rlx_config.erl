@@ -4,7 +4,7 @@
          load/2,
          format_error/1]).
 
--include("relx.hrl").
+-include("../../include/relx.hrl").
 -include("rlx_log.hrl").
 
 %% TODO: list out each supported config

@@ -6,4 +6,4 @@ An OTP library
 Build
 -----
 
-    $ rebar3 compile
+    $ epm compile

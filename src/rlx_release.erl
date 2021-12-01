@@ -53,7 +53,7 @@
               release_spec/0,
               parsed_goal/0]).
 
--include("relx.hrl").
+-include("../../include/relx.hrl").
 
 -record(release_t, {name :: atom(),
                     vsn :: string(),

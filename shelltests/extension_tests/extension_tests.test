@@ -1,4 +1,4 @@
-$ rebar3 release
+$ epm release
 > /===> Release successfully assembled:/
 >= 0
 

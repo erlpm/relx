@@ -62,7 +62,7 @@
                link                  := boolean() | undefined,
 
                %% `project' app is one the user is actively developing on
-               %% `dep' is dependency fetched by rebar3
+               %% `dep' is dependency fetched by epm
                %% `checkout' is a dependency linked to from the _checkouts dir
                %% and treated like a project app
                %% `system' applications are dependencies from Erlang/OTP

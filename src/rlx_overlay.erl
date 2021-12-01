@@ -8,7 +8,7 @@
 
 -define(DIRECTORY_RE, ".*(\/|\\\\)$").
 
--include("relx.hrl").
+-include("../../include/relx.hrl").
 -include("rlx_log.hrl").
 
 render(Release, State) ->
@@ -340,7 +340,7 @@ wildcard_copy(State, Release, FromFile0, ToFile0, CopyFun, ErrorTag) ->
                                               filename:join(ToFile1, filename:basename(FromFile)))
                               end, ok, FromFiles)
           end,
-                  
+
     case Res of
         ok ->
             ok;

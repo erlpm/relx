@@ -3,7 +3,7 @@
 -export([do/2,
          format_error/1]).
 
--include("relx.hrl").
+-include("../../include/relx.hrl").
 -include("rlx_log.hrl").
 -include_lib("kernel/include/file.hrl").
 
@@ -26,11 +26,11 @@ do(Release, State) ->
         true ->
             ?log_debug("Stripping release beam files", []),
             %% make *.beam to be writeable for strip.
-            ModeChangedFiles = [ 
+            ModeChangedFiles = [
                 OrigFileMode
-                || File <- rlx_file_utils:wildcard_paths([OutputDir ++ "/**/*.beam"]), 
+                || File <- rlx_file_utils:wildcard_paths([OutputDir ++ "/**/*.beam"]),
                     OrigFileMode <- begin
-                        {ok, #file_info{mode = OrigMode}} = file:read_file_info(File), 
+                        {ok, #file_info{mode = OrigMode}} = file:read_file_info(File),
                         case OrigMode band 8#0200 =/= 8#0200 of
                             true ->
                                 file:change_mode(File, OrigMode bor 8#0200),
@@ -46,7 +46,7 @@ do(Release, State) ->
                     erlang:error(?RLX_ERROR({strip_release, Reason}))
             after
                 %% revert file permissions after strip.
-                [ file:change_mode(File, OrigMode) 
+                [ file:change_mode(File, OrigMode)
                     || {File, OrigMode} <- ModeChangedFiles ]
             end;
         false ->
@@ -718,25 +718,25 @@ maybe_check_for_undefined_functions_(State, Release) ->
             % Link to ensure internal errors don't go unnoticed.
             link(Pid),
 
-            %% for every app in the release add it to the xref apps to be 
-            %% analyzed if it is a project app as specified by rebar3.
+            %% for every app in the release add it to the xref apps to be
+            %% analyzed if it is a project app as specified by epm.
             add_project_apps_to_xref(Rf, rlx_release:app_specs(Release), State),
 
-            %% without adding the erts application there will be warnings about 
-            %% missing functions from the preloaded modules even though they 
+            %% without adding the erts application there will be warnings about
+            %% missing functions from the preloaded modules even though they
             %% are in the runtime.
             ErtsApp = code:lib_dir(erts, ebin),
 
-            %% xref library path is what is searched for functions used by the 
-            %% project apps. 
+            %% xref library path is what is searched for functions used by the
+            %% project apps.
             %% we only add applications depended on by the release so that we
             %% catch modules not included in the release to warn the user about.
-            CodePath = 
-                [ErtsApp | [filename:join(rlx_app_info:dir(App), "ebin") 
+            CodePath =
+                [ErtsApp | [filename:join(rlx_app_info:dir(App), "ebin")
                     || App <- rlx_release:applications(Release)]],
             _ = xref:set_library_path(Rf, CodePath),
 
-            %% check for undefined function calls from project apps in the 
+            %% check for undefined function calls from project apps in the
             %% release
             case xref:analyze(Rf, undefined_function_calls) of
                 {ok, Warnings} ->
@@ -745,11 +745,11 @@ maybe_check_for_undefined_functions_(State, Release) ->
                     format_xref_warning(FilteredWarnings);
                 {error, _} = Error ->
                     ?log_warn(
-                        "Error running xref analyze: ~s", 
+                        "Error running xref analyze: ~s",
                         [xref:format_error(Error)])
             end
     after
-        %% Even if the code crashes above, always ensure the xref server is 
+        %% Even if the code crashes above, always ensure the xref server is
         %% stopped.
         stopped = xref:stop(Rf)
     end.
@@ -762,7 +762,7 @@ add_project_apps_to_xref(Rf, [AppSpec | Rest], State) ->
             case xref:add_application(
                     Rf,
                     rlx_app_info:dir(App),
-                    [{name, rlx_app_info:name(App)}, {warnings, false}]) 
+                    [{name, rlx_app_info:name(App)}, {warnings, false}])
             of
                 {ok, _} ->
                     ok;

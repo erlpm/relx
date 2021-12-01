@@ -1,4 +1,4 @@
-$ TERM=dumb rebar3 release
+$ TERM=dumb epm release
 > /Release successfully assembled:/
 >= 0
 

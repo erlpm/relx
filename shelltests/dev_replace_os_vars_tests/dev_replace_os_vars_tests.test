@@ -1,4 +1,4 @@
-$ rebar3 release
+$ epm release
 > / Release successfully assembled: /
 >= 0
 
@@ -60,7 +60,7 @@ cookie1
 $ ./_build/default/rel/replace_os_vars_tests/bin/replace_os_vars_tests stop
 >= 0
 
-$ rebar3 as dev release
+$ epm as dev release
 > / Release successfully assembled: /
 >= 0
 

@@ -9,7 +9,7 @@ $ cp config/vm-5.args /tmp/vm-2.args
 $ cp config/vm-6.args /tmp/vm-6.args
 >= 0
 
-$ rebar3 release
+$ epm release
 > / Release successfully assembled: /
 >= 0
 

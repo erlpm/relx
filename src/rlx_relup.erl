@@ -3,7 +3,7 @@
 -export([do/4,
          format_error/1]).
 
--include("relx.hrl").
+-include("../../include/relx.hrl").
 -include("rlx_log.hrl").
 
 -spec do(atom(), string(), string() | undefined, rlx_state:t()) -> {ok, rlx_state:t()} | relx:error().

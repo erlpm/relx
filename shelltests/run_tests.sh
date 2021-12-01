@@ -9,17 +9,17 @@ export TERM=dumb
 find . -name _build | xargs rm -rf
 
 current_dir=$(pwd)
-rebar3_dir=$(mktemp -d)
+epm_dir=$(mktemp -d)
 
-pushd "${rebar3_dir}"
+pushd "${epm_dir}"
 
-# clone latest rebar3 and build with relx as a checkout
-git clone https://github.com/erlang/rebar3 .
+# clone latest epm and build with relx as a checkout
+git clone https://github.com/erlpm/epm .
 mkdir _checkouts
 ln -s "$current_dir/../../relx" _checkouts/relx
-sed -i 's_relx\(.*\)build/default/lib/_relx\1checkouts_' rebar.config
+sed -i 's_relx\(.*\)build/default/lib/_relx\1checkouts_' epm.config
 ./bootstrap
 
 popd
 
-PATH="${rebar3_dir}":~/.cabal/bin/:$PATH shelltest -c --diff --all --execdir -- */*.test
+PATH="${epm_dir}":~/.cabal/bin/:$PATH shelltest -c --diff --all --execdir -- */*.test
